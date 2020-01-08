@@ -25,3 +25,4 @@ hs_err_pid*
 # Ignore build directory
 build
 .gradle
+.idea
