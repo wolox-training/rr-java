@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Book {
@@ -61,51 +62,57 @@ public class Book {
         this.genre = genre.orElse(null);
     }
 
+    @NotNull
     public String getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
+    public void setAuthor(@NotNull String author) {
         this.author = author;
     }
 
+    @NotNull
     public String getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(@NotNull String image) {
         this.image = image;
     }
 
+    @NotNull
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(@NotNull String title) {
         this.title = title;
     }
 
+    @NotNull
     public String getSubtitle() {
         return subtitle;
     }
 
-    public void setSubtitle(String subtitle) {
+    public void setSubtitle(@NotNull String subtitle) {
         this.subtitle = subtitle;
     }
 
+    @NotNull
     public String getPublisher() {
         return publisher;
     }
 
-    public void setPublisher(String publisher) {
+    public void setPublisher(@NotNull String publisher) {
         this.publisher = publisher;
     }
 
+    @NotNull
     public String getYear() {
         return year;
     }
 
-    public void setYear(String year) {
+    public void setYear(@NotNull String year) {
         this.year = year;
     }
 
@@ -117,11 +124,12 @@ public class Book {
         this.pages = pages;
     }
 
+    @NotNull
     public String getIsbn() {
         return isbn;
     }
 
-    public void setIsbn(String isbn) {
+    public void setIsbn(@NotNull String isbn) {
         this.isbn = isbn;
     }
 }
