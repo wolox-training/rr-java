@@ -1,5 +1,7 @@
 package wolox.training.models;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -14,30 +16,42 @@ import wolox.training.exceptions.BookAlreadyOwnedException;
 import wolox.training.exceptions.BookNotOwnedException;
 
 @Entity
+@ApiModel("Contains information about each book on the platform")
 public class Book {
 
     @ManyToMany(mappedBy = "books")
+    @ApiModelProperty("List of users than has this book")
     List<User> users;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @ApiModelProperty("Unique number identifying the user")
     private long id;
     @Column
+    @ApiModelProperty("The genre this book belongs to")
     private String genre;
     @Column(nullable = false)
+    @ApiModelProperty("The author of this book")
     private String author;
     @Column(nullable = false)
+    @ApiModelProperty("An URL for an image of this book")
     private String image;
     @Column(nullable = false)
+    @ApiModelProperty("The title for this book")
     private String title;
     @Column(nullable = false)
+    @ApiModelProperty("The subtitle for this book")
     private String subtitle;
     @Column(nullable = false)
+    @ApiModelProperty("The publisher of this book")
     private String publisher;
     @Column(nullable = false)
+    @ApiModelProperty("The year this book was published")
     private String year;
     @Column(nullable = false)
+    @ApiModelProperty("The number of pages of this book")
     private int pages;
     @Column(nullable = false)
+    @ApiModelProperty("The ISBN code for this book.")
     private String isbn;
 
     public Book() {
