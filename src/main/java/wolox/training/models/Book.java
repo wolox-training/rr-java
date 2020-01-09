@@ -1,44 +1,42 @@
 package wolox.training.models;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
+import wolox.training.exceptions.BookAlreadyOwnedException;
+import wolox.training.exceptions.BookNotOwnedException;
 
 @Entity
 public class Book {
 
+    @ManyToMany(mappedBy = "books")
+    List<User> users;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-
     @Column
     private String genre;
-
     @Column(nullable = false)
     private String author;
-
     @Column(nullable = false)
     private String image;
-
     @Column(nullable = false)
     private String title;
-
     @Column(nullable = false)
     private String subtitle;
-
     @Column(nullable = false)
     private String publisher;
-
     @Column(nullable = false)
     private String year;
-
     @Column(nullable = false)
     private int pages;
-
     @Column(nullable = false)
     private String isbn;
 
@@ -131,5 +129,24 @@ public class Book {
 
     public void setIsbn(@NotNull String isbn) {
         this.isbn = isbn;
+    }
+
+    @NotNull
+    public List<User> getUsers() {
+        return Collections.unmodifiableList(users);
+    }
+
+    public void addUser(@NotNull User user) throws BookAlreadyOwnedException {
+        if (users.contains(user)) {
+            throw new BookAlreadyOwnedException();
+        }
+        users.add(user);
+    }
+
+    public void removeUser(@NotNull User user) throws BookNotOwnedException {
+        if (!users.contains(user)) {
+            throw new BookNotOwnedException();
+        }
+        users.remove(user);
     }
 }
