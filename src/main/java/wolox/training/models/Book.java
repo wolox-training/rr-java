@@ -50,10 +50,6 @@ public class Book {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public Optional<String> getGenre() {
         return Optional.ofNullable(genre);
     }
