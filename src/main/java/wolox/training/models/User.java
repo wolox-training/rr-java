@@ -83,7 +83,7 @@ public class User {
 
     public void setBirthdate(@NotNull LocalDate birthdate) {
         Preconditions.checkNotNull(birthdate, "birthdate is required.");
-        Preconditions.checkArgument(YEARS.between(birthdate, LocalDate.now()) < 18,
+        Preconditions.checkArgument(YEARS.between(birthdate, LocalDate.now()) > 17,
             "users can't be less than 18 years old");
         this.birthdate = birthdate;
     }
