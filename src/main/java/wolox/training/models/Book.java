@@ -1,5 +1,6 @@
 package wolox.training.models;
 
+import com.google.common.base.Preconditions;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.Collections;
@@ -80,6 +81,7 @@ public class Book {
     }
 
     public void setAuthor(@NotNull String author) {
+        Preconditions.checkNotNull(author);
         this.author = author;
     }
 
@@ -89,6 +91,7 @@ public class Book {
     }
 
     public void setImage(@NotNull String image) {
+        Preconditions.checkNotNull(image);
         this.image = image;
     }
 
@@ -98,6 +101,7 @@ public class Book {
     }
 
     public void setTitle(@NotNull String title) {
+        Preconditions.checkNotNull(title);
         this.title = title;
     }
 
@@ -107,6 +111,7 @@ public class Book {
     }
 
     public void setSubtitle(@NotNull String subtitle) {
+        Preconditions.checkNotNull(subtitle);
         this.subtitle = subtitle;
     }
 
@@ -116,6 +121,7 @@ public class Book {
     }
 
     public void setPublisher(@NotNull String publisher) {
+        Preconditions.checkNotNull(publisher);
         this.publisher = publisher;
     }
 
@@ -125,6 +131,7 @@ public class Book {
     }
 
     public void setYear(@NotNull String year) {
+        Preconditions.checkNotNull(year);
         this.year = year;
     }
 
@@ -142,6 +149,7 @@ public class Book {
     }
 
     public void setIsbn(@NotNull String isbn) {
+        Preconditions.checkNotNull(isbn);
         this.isbn = isbn;
     }
 
@@ -151,6 +159,7 @@ public class Book {
     }
 
     public void addUser(@NotNull User user) throws BookAlreadyOwnedException {
+        Preconditions.checkNotNull(user);
         if (users.contains(user)) {
             throw new BookAlreadyOwnedException();
         }
@@ -158,6 +167,7 @@ public class Book {
     }
 
     public void removeUser(@NotNull User user) throws BookNotOwnedException {
+        Preconditions.checkNotNull(user);
         if (!users.contains(user)) {
             throw new BookNotOwnedException();
         }
