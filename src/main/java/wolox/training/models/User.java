@@ -1,5 +1,7 @@
 package wolox.training.models;
 
+import static java.time.temporal.ChronoUnit.YEARS;
+
 import com.google.common.base.Preconditions;
 import java.time.LocalDate;
 import java.util.Collections;
@@ -17,6 +19,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import wolox.training.exceptions.BookAlreadyOwnedException;
 import wolox.training.exceptions.BookNotOwnedException;
+import wolox.training.validators.StringValidator;
 
 @Entity
 @Table(name = "users")
@@ -58,6 +61,7 @@ public class User {
     }
 
     public void setUsername(@NotNull String username) {
+        StringValidator.validate(username, "username", 50);
         this.username = username;
     }
 
@@ -67,7 +71,7 @@ public class User {
     }
 
     public void setName(@NotNull String name) {
-        Preconditions.checkNotNull(name);
+        StringValidator.validate(username, "username", 120);
         this.name = name;
     }
 
@@ -77,7 +81,9 @@ public class User {
     }
 
     public void setBirthdate(@NotNull LocalDate birthdate) {
-        Preconditions.checkNotNull(birthdate);
+        Preconditions.checkNotNull(birthdate, "birthdate is required.");
+        Preconditions.checkArgument(YEARS.between(birthdate, LocalDate.now()) < 18,
+            "users can't be less than 18 years old");
         this.birthdate = birthdate;
     }
 
@@ -87,7 +93,7 @@ public class User {
     }
 
     public void addBook(@NotNull Book book) throws BookAlreadyOwnedException {
-        Preconditions.checkNotNull(book);
+        Preconditions.checkNotNull(book, "you cannot add a non existent book.");
         if (books.contains(book)) {
             throw new BookAlreadyOwnedException();
         }
@@ -95,7 +101,7 @@ public class User {
     }
 
     public void removeBook(@NotNull Book book) throws BookNotOwnedException {
-        Preconditions.checkNotNull(book);
+        Preconditions.checkNotNull(book, "you can't remove a null book.");
         if (!books.contains(book)) {
             throw new BookNotOwnedException();
         }

@@ -15,10 +15,15 @@ import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
 import wolox.training.exceptions.BookAlreadyOwnedException;
 import wolox.training.exceptions.BookNotOwnedException;
+import wolox.training.validators.NumberValidator;
+import wolox.training.validators.StringValidator;
+import wolox.training.validators.YearValidator;
 
 @Entity
 @ApiModel("Contains information about each book on the platform")
 public class Book {
+
+    private static final String ISBN_FORMAT = "^(97(8|9))?\\d{9}(\\d|X)$";
 
     @ManyToMany(mappedBy = "books")
     @ApiModelProperty("List of users than has this book")
@@ -81,7 +86,7 @@ public class Book {
     }
 
     public void setAuthor(@NotNull String author) {
-        Preconditions.checkNotNull(author);
+        Preconditions.checkNotNull(author, "author is required");
         this.author = author;
     }
 
@@ -91,7 +96,7 @@ public class Book {
     }
 
     public void setImage(@NotNull String image) {
-        Preconditions.checkNotNull(image);
+        Preconditions.checkNotNull(image, "image is required");
         this.image = image;
     }
 
@@ -101,7 +106,7 @@ public class Book {
     }
 
     public void setTitle(@NotNull String title) {
-        Preconditions.checkNotNull(title);
+        StringValidator.validate(title, "title", 80);
         this.title = title;
     }
 
@@ -111,7 +116,7 @@ public class Book {
     }
 
     public void setSubtitle(@NotNull String subtitle) {
-        Preconditions.checkNotNull(subtitle);
+        StringValidator.validate(title, "subtitle", 80);
         this.subtitle = subtitle;
     }
 
@@ -121,7 +126,7 @@ public class Book {
     }
 
     public void setPublisher(@NotNull String publisher) {
-        Preconditions.checkNotNull(publisher);
+        StringValidator.validate(title, "subtitle", 50);
         this.publisher = publisher;
     }
 
@@ -131,7 +136,7 @@ public class Book {
     }
 
     public void setYear(@NotNull String year) {
-        Preconditions.checkNotNull(year);
+        YearValidator.validate(year, "year");
         this.year = year;
     }
 
@@ -140,6 +145,7 @@ public class Book {
     }
 
     public void setPages(int pages) {
+        NumberValidator.validate(pages, "number of pages", 0, 1000);
         this.pages = pages;
     }
 
@@ -149,7 +155,8 @@ public class Book {
     }
 
     public void setIsbn(@NotNull String isbn) {
-        Preconditions.checkNotNull(isbn);
+        Preconditions.checkNotNull(isbn, "ISBN is required");
+        Preconditions.checkArgument(isbn.matches(ISBN_FORMAT), "ISBN is not a valid ISBN code.");
         this.isbn = isbn;
     }
 
@@ -159,7 +166,7 @@ public class Book {
     }
 
     public void addUser(@NotNull User user) throws BookAlreadyOwnedException {
-        Preconditions.checkNotNull(user);
+        Preconditions.checkNotNull(user, "user is required.");
         if (users.contains(user)) {
             throw new BookAlreadyOwnedException();
         }
@@ -167,7 +174,7 @@ public class Book {
     }
 
     public void removeUser(@NotNull User user) throws BookNotOwnedException {
-        Preconditions.checkNotNull(user);
+        Preconditions.checkNotNull(user, "user is required");
         if (!users.contains(user)) {
             throw new BookNotOwnedException();
         }
