@@ -4,6 +4,7 @@ import static java.time.temporal.ChronoUnit.YEARS;
 
 import com.google.common.base.Preconditions;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -90,6 +91,10 @@ public class User {
 
     @NotNull
     public List<Book> getBooks() {
+        // Prevent when the list is empty to crash the APP.
+        if (books == null) {
+            return Collections.unmodifiableList(new ArrayList<>());
+        }
         return Collections.unmodifiableList(books);
     }
 
