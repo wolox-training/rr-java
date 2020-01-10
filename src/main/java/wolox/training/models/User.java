@@ -61,7 +61,7 @@ public class User {
         return username;
     }
 
-    public void setUsername(@NotNull String username) {
+    public void setUsername(String username) {
         System.out.println(username);
         StringValidator.validate(username, "username", 50);
         this.username = username;
@@ -72,7 +72,7 @@ public class User {
         return name;
     }
 
-    public void setName(@NotNull String name) {
+    public void setName(String name) {
         StringValidator.validate(name, "name", 120);
         this.name = name;
     }
@@ -82,7 +82,7 @@ public class User {
         return birthdate;
     }
 
-    public void setBirthdate(@NotNull LocalDate birthdate) {
+    public void setBirthdate(LocalDate birthdate) {
         Preconditions.checkNotNull(birthdate, "birthdate is required.");
         Preconditions.checkArgument(YEARS.between(birthdate, LocalDate.now()) > 17,
             "users can't be less than 18 years old");
