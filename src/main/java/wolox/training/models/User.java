@@ -61,6 +61,7 @@ public class User {
     }
 
     public void setUsername(@NotNull String username) {
+        System.out.println(username);
         StringValidator.validate(username, "username", 50);
         this.username = username;
     }
