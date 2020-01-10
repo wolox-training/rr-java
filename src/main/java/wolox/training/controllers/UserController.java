@@ -70,7 +70,7 @@ public class UserController {
         return user.getBooks();
     }
 
-    @PostMapping("/{userId}/books")
+    @PutMapping("/{userId}/books")
     public Book addBook(@PathVariable Long userId, @RequestBody Long bookId)
         throws UserNotFoundException, BookNotFoundException, BookAlreadyOwnedException {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
