@@ -14,6 +14,6 @@ public final class StringValidator {
         Preconditions.checkNotNull(value, name + " can't be empty");
         Preconditions.checkArgument(value.length() < 1, name + "can't be empty");
         Preconditions.checkArgument(value.length() > maxLength,
-            String.format("%s can't be longer than %d characters.", name, maxLength);
+            String.format("%s can't be longer than %d characters.", name, maxLength));
     }
 }
