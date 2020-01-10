@@ -71,7 +71,7 @@ public class User {
     }
 
     public void setName(@NotNull String name) {
-        StringValidator.validate(username, "name", 120);
+        StringValidator.validate(name, "name", 120);
         this.name = name;
     }
 
