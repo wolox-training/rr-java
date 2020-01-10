@@ -19,7 +19,7 @@ public class Book {
     @ManyToMany(mappedBy = "books")
     List<User> users;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column
     private String genre;
