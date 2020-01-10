@@ -17,6 +17,7 @@ import wolox.training.exceptions.BookAlreadyOwnedException;
 import wolox.training.exceptions.BookNotOwnedException;
 import wolox.training.validators.NumberValidator;
 import wolox.training.validators.StringValidator;
+import wolox.training.validators.URLValidator;
 import wolox.training.validators.YearValidator;
 
 @Entity
@@ -96,7 +97,7 @@ public class Book {
     }
 
     public void setImage(@NotNull String image) {
-        Preconditions.checkNotNull(image, "image is required");
+        URLValidator.validate(image, image);
         this.image = image;
     }
 
