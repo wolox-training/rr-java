@@ -1,6 +1,10 @@
 package wolox.training.models;
 
+import static java.time.temporal.ChronoUnit.YEARS;
+
+import com.google.common.base.Preconditions;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -16,6 +20,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import wolox.training.exceptions.BookAlreadyOwnedException;
 import wolox.training.exceptions.BookNotOwnedException;
+import wolox.training.validators.StringValidator;
 
 @Entity
 @Table(name = "users")
@@ -41,6 +46,7 @@ public class User {
     private List<Book> books;
 
     public User() {
+        books = new ArrayList<>();
     }
 
     public long getId() {
@@ -52,7 +58,9 @@ public class User {
         return username;
     }
 
-    public void setUsername(@NotNull String username) {
+    public void setUsername(String username) {
+        System.out.println(username);
+        StringValidator.validate(username, "username", 50);
         this.username = username;
     }
 
@@ -61,7 +69,8 @@ public class User {
         return name;
     }
 
-    public void setName(@NotNull String name) {
+    public void setName(String name) {
+        StringValidator.validate(name, "name", 120);
         this.name = name;
     }
 
@@ -70,7 +79,10 @@ public class User {
         return birthdate;
     }
 
-    public void setBirthdate(@NotNull LocalDate birthdate) {
+    public void setBirthdate(LocalDate birthdate) {
+        Preconditions.checkNotNull(birthdate, "birthdate is required.");
+        Preconditions.checkArgument(YEARS.between(birthdate, LocalDate.now()) > 17,
+            "users can't be less than 18 years old");
         this.birthdate = birthdate;
     }
 
@@ -80,6 +92,7 @@ public class User {
     }
 
     public void addBook(@NotNull Book book) throws BookAlreadyOwnedException {
+        Preconditions.checkNotNull(book, "you cannot add a non existent book.");
         if (books.contains(book)) {
             throw new BookAlreadyOwnedException();
         }
@@ -87,6 +100,7 @@ public class User {
     }
 
     public void removeBook(@NotNull Book book) throws BookNotOwnedException {
+        Preconditions.checkNotNull(book, "you can't remove a null book.");
         if (!books.contains(book)) {
             throw new BookNotOwnedException();
         }
