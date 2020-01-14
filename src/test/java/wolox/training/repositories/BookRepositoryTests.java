@@ -2,6 +2,7 @@ package wolox.training.repositories;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +25,15 @@ public class BookRepositoryTests {
         bookRepository.save(book);
 
         assertThat(bookRepository.findByAuthor(book.getAuthor()))
-            .isNotNull()
-            .isInstanceOf(Book.class);
+            .isNotEmpty()
+            .isInstanceOf(Optional.class)
+        ;
     }
 
     @Test
     public void whenFindingBookByAuthorAndNotExists_thenIsNull() {
         Book book = bookFactory.build();
 
-        assertThat(bookRepository.findByAuthor(book.getAuthor())).isNull();
+        assertThat(bookRepository.findByAuthor(book.getAuthor())).isEmpty();
     }
 }

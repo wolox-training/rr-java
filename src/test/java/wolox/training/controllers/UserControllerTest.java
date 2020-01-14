@@ -1,7 +1,9 @@
 package wolox.training.controllers;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -73,26 +75,70 @@ public class UserControllerTest {
     }
 
     @Test
-    public void givenABookAndUser_whenAddingABook_itSucceeds() {
+    public void givenABookAndUser_whenAddingABook_itSucceeds() throws Exception {
         User user = userFactory.build();
         Book book = bookFactory.build();
         Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         Mockito.when(bookRepository.findById(1L)).thenReturn(Optional.of(book));
-        mvc.perform(put())
+        mvc.perform(put("/api/users/1/books").contentType(MediaType.APPLICATION_JSON).content("1"))
+            .andExpect(status().isOk())
+        ;
     }
 
     @Test
-    public void givenABookAndUser_whenAddingABookAgain_itFails() {
-
+    public void givenABookAndUser_whenAddingABookAgain_itFails() throws Exception {
+        User user = userFactory.build();
+        Book book = bookFactory.build();
+        Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        Mockito.when(bookRepository.findById(1L)).thenReturn(Optional.of(book));
+        mvc.perform(put("/api/users/1/books").contentType(MediaType.APPLICATION_JSON).content("1"))
+            .andExpect(status().isOk())
+        ;
+        mvc.perform(put("/api/users/1/books").contentType(MediaType.APPLICATION_JSON).content("1"))
+            .andExpect(status().isUnprocessableEntity())
+        ;
     }
 
     @Test
-    public void givenABookAndUser_whenAddingAnInvalidBook_itFails() {
-
+    public void givenABookAndUser_whenAddingAnInvalidBook_itFails() throws Exception {
+        User user = userFactory.build();
+        Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        Mockito.when(bookRepository.findById(1L)).thenReturn(Optional.empty());
+        mvc.perform(put("/api/users/1/books").contentType(MediaType.APPLICATION_JSON).content("1"))
+            .andExpect(status().isNotFound())
+        ;
     }
 
     @Test
-    public void givenABookAndUser_whenTheUserIsInvalid_itFails() {
+    public void givenABookAndUser_whenTheUserIsInvalid_itFails() throws Exception {
+        Book book = bookFactory.build();
+        Mockito.when(userRepository.findById(1L)).thenReturn(Optional.empty());
+        Mockito.when(bookRepository.findById(1L)).thenReturn(Optional.of(book));
+        mvc.perform(put("/api/users/1/books").contentType(MediaType.APPLICATION_JSON).content("1"))
+            .andExpect(status().isNotFound())
+        ;
+    }
 
+    @Test
+    public void givenBookAndUser_whenTheUserHasTheBookAndItsRemoved_thenSucceeds()
+        throws Exception {
+        User user = userFactory.build();
+        Book book = bookFactory.build();
+        user.addBook(book);
+        Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        Mockito.when(bookRepository.findById(1L)).thenReturn(Optional.of(book));
+        mvc.perform(delete("/api/users/1/books/1").contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+        ;
+    }
+
+    @Test
+    public void givenUser_whenTheUserRemovesABookTheyDoNotHave_thenFails() throws Exception {
+        User user = userFactory.build();
+        Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        Mockito.when(bookRepository.findById(1L)).thenReturn(Optional.empty());
+        mvc.perform(delete("/api/users/1/books/1").contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound())
+        ;
     }
 }

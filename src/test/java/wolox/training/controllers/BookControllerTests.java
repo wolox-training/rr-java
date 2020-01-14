@@ -91,16 +91,17 @@ public class BookControllerTests {
     public void givenAnExistingBook_whenUpdatingTheBook_itSuccess() throws Exception {
         Book book = bookFactory.build();
         // Just add different data for parameters
-        String bookJson = objectMapper.writeValueAsString(bookFactory.build());
+        String json = objectMapper.writeValueAsString(bookFactory.build());
         Mockito.when(bookRepository.findById(0L)).thenReturn(Optional.of(book));
-        mvc.perform(put("/api/books/0").contentType(MediaType.APPLICATION_JSON).content(bookJson))
+        mvc.perform(put("/api/books/0").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isOk());
     }
 
     @Test
     public void givenAnInvalidBook_whenUpdatingTheBook_itFailsWithNotFound() throws Exception {
-        Mockito.when(bookRepository.findById(10L)).thenReturn(Optional.empty());
-        mvc.perform(put("/api/books/10").contentType(MediaType.APPLICATION_JSON).content("{}"))
+        Mockito.when(bookRepository.findById(0L)).thenReturn(Optional.empty());
+        String json = objectMapper.writeValueAsString(bookFactory.build());
+        mvc.perform(put("/api/books/0").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isNotFound());
     }
 
@@ -108,8 +109,6 @@ public class BookControllerTests {
     public void givenInvalidParameters_whenUpdatingTheBook_itFailsWithBadRequest()
         throws Exception {
         Book book = bookFactory.build();
-        // Just add different data for parameters
-        String badJson = "";
         Mockito.when(bookRepository.findById(0L)).thenReturn(Optional.of(book));
         mvc.perform(put("/api/books/0").contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isBadRequest());

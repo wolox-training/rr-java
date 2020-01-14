@@ -2,6 +2,7 @@ package wolox.training.repositories;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +25,8 @@ class UserRepositoryTests {
         userRepository.save(user);
 
         assertThat(userRepository.findByUsername(user.getUsername()))
-            .isNotNull()
-            .isInstanceOf(User.class);
+            .isNotEmpty()
+            .isInstanceOf(Optional.class);
     }
 
     @Test
@@ -33,6 +34,6 @@ class UserRepositoryTests {
         User user = userFactory.build();
 
         assertThat(userRepository.findByUsername(user.getUsername()))
-            .isNull();
+            .isEmpty();
     }
 }
