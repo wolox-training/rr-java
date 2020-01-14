@@ -46,6 +46,7 @@ public class User {
     private List<Book> books;
 
     public User() {
+        books = new ArrayList<>();
     }
 
     public long getId() {
@@ -91,10 +92,6 @@ public class User {
 
     @NotNull
     public List<Book> getBooks() {
-        // Prevent when the list is empty to crash the APP.
-        if (books == null) {
-            return Collections.unmodifiableList(new ArrayList<>());
-        }
         return Collections.unmodifiableList(books);
     }
 

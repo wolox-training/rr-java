@@ -63,6 +63,7 @@ public class Book {
     private String isbn;
 
     public Book() {
+        users = new ArrayList<>();
     }
 
 
@@ -164,10 +165,6 @@ public class Book {
 
     @NotNull
     public List<User> getUsers() {
-        // Prevent when the list is empty to crash the APP.
-        if (users == null) {
-            return Collections.unmodifiableList(new ArrayList<>());
-        }
         return Collections.unmodifiableList(users);
     }
 

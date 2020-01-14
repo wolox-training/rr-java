@@ -6,6 +6,9 @@ import java.net.URL;
 
 public class URLValidator {
 
+    private URLValidator() {
+    }
+
     public static void validate(String url, String name) {
         Preconditions.checkNotNull(url, name + " is required.");
         Preconditions.checkArgument(isUrl(url), name + " is not an URL.");

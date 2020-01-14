@@ -1,13 +1,10 @@
 package wolox.training.validators;
 
 import com.google.common.base.Preconditions;
-import wolox.training.exceptions.SingletonInstanceException;
 
 public final class StringValidator {
 
-    // This class is a singleton
-    private StringValidator() throws SingletonInstanceException {
-        throw new SingletonInstanceException();
+    private StringValidator() {
     }
 
     public static void validate(String value, String name, int maxLength) {
