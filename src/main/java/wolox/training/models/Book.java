@@ -1,5 +1,7 @@
 package wolox.training.models;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -20,12 +22,14 @@ import wolox.training.exceptions.BookNotOwnedException;
  * will be able to add or remove books from their collection.
  */
 @Entity
+@ApiModel("Contains information about each book on the platform")
 public class Book {
 
     /**
      * A list of users containing the book.
      */
     @ManyToMany(mappedBy = "books")
+    @ApiModelProperty("List of users than has this book")
     List<User> users;
 
     /**
@@ -33,60 +37,70 @@ public class Book {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty("Unique number identifying the user")
     private long id;
 
     /**
      * The genre of the book, this value is Optional.
      */
     @Column
+    @ApiModelProperty("The genre this book belongs to")
     private String genre;
 
     /**
      * The author of the book.
      */
     @Column(nullable = false)
+    @ApiModelProperty("The author of this book")
     private String author;
 
     /**
      * An URL for the book's cover photo.
      */
     @Column(nullable = false)
+    @ApiModelProperty("An URL for an image of this book")
     private String image;
 
     /**
      * The book's title.
      */
     @Column(nullable = false)
+    @ApiModelProperty("The title for this book")
     private String title;
 
     /**
      * The books's subtitle.
      */
     @Column(nullable = false)
+    @ApiModelProperty("The subtitle for this book")
     private String subtitle;
 
     /**
      * The book's publisher
      */
     @Column(nullable = false)
+    @ApiModelProperty("The publisher of this book")
     private String publisher;
 
     /**
      * The year when this book was published.
      */
     @Column(nullable = false)
+    @ApiModelProperty("The year this book was published")
     private String year;
 
     /**
      * The number of pages on the book.
      */
     @Column(nullable = false)
+    @ApiModelProperty("The number of pages of this book")
     private int pages;
 
     /**
      * The ISBN code identifying this book.
      */
     @Column(nullable = false)
+    @ApiModelProperty("The ISBN code for this book.")
     private String isbn;
 
     public Book() {
