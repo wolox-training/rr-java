@@ -2,6 +2,7 @@ package wolox.training.models;
 
 import static java.time.temporal.ChronoUnit.YEARS;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Preconditions;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -39,6 +40,9 @@ public class User {
     @Column(nullable = false)
     private LocalDate birthdate;
 
+    @Column(nullable = false)
+    private String password;
+
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "user_books",
         joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
@@ -59,7 +63,6 @@ public class User {
     }
 
     public void setUsername(String username) {
-        System.out.println(username);
         StringValidator.validate(username, "username", 50);
         this.username = username;
     }
@@ -107,4 +110,13 @@ public class User {
         books.remove(book);
     }
 
+    @JsonIgnore
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String encodedPassword) {
+        Preconditions.checkNotNull(encodedPassword);
+        this.password = encodedPassword;
+    }
 }

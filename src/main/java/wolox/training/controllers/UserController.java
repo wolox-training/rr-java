@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiParam;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +35,8 @@ public class UserController {
     UserRepository userRepository;
     @Autowired
     BookRepository bookRepository;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @GetMapping
     @ApiOperation(value = "Returns all users of the application")
@@ -51,7 +54,11 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Creates a new user")
-    public User create(@RequestBody User user) {
+    public User create(@RequestBody User userDto) {
+        User user = new User();
+        user.setUsername(userDto.getUsername());
+        user.setBirthdate(userDto.getBirthdate());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         return userRepository.save(user);
     }
 
@@ -67,13 +74,29 @@ public class UserController {
 
     @PutMapping("/{id}")
     @ApiOperation(value = "Updates an user's information")
-    public User updateUser(@RequestBody User user, @PathVariable Long id)
+    public User updateUser(@RequestBody User dto, @PathVariable Long id)
         throws UserMismatchException, UserNotFoundException {
-        if (user.getId() != id) {
+        if (dto.getId() != id) {
             throw new UserMismatchException();
         }
-        userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+        User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+        // Update all but password
+        user.setBirthdate(dto.getBirthdate());
+        user.setName(dto.getName());
+        user.setUsername(dto.getUsername());
         return userRepository.save(user);
+    }
+
+    @PutMapping("/{id}/password")
+    @ApiOperation(value = "Updates an user's password")
+    public User updatePassword(@RequestBody User dto, @PathVariable Long id)
+        throws UserNotFoundException, UserMismatchException {
+        if (dto.getId() != id) {
+            throw new UserMismatchException();
+        }
+        User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        return user;
     }
 
     @GetMapping("/{userId}/books")

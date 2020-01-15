@@ -18,6 +18,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import wolox.training.factories.BookFactory;
 import wolox.training.factories.UserFactory;
@@ -43,6 +44,7 @@ public class UserControllerTest {
     private BookRepository bookRepository;
 
     @Test
+    @WithMockUser(username = "test", password = "test")
     public void givenUsers_whenListingAllUsers_thenAllUsersAreReturned() throws Exception {
         int count = userFactory.faker().number().numberBetween(3, 5);
         List<User> users = userFactory.buildList(count);
@@ -56,6 +58,7 @@ public class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "test", password = "test")
     public void givenAnExistingUser_whenShowingAnUser_thenReturnsTheBook() throws Exception {
         User user = userFactory.build();
         String json = objectMapper.writeValueAsString(user);
@@ -67,6 +70,7 @@ public class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "test", password = "test")
     public void givenAnInvalidUser_whenShowingTheUser_thenReturnsNotFound() throws Exception {
         Mockito.when(userRepository.findById(3L)).thenReturn(Optional.empty());
         mvc.perform(get("/api/users/3").contentType(MediaType.APPLICATION_JSON))
@@ -75,6 +79,7 @@ public class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "test", password = "test")
     public void givenABookAndUser_whenAddingABook_itSucceeds() throws Exception {
         User user = userFactory.build();
         Book book = bookFactory.build();
@@ -86,6 +91,7 @@ public class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "test", password = "test")
     public void givenABookAndUser_whenAddingABookAgain_itFails() throws Exception {
         User user = userFactory.build();
         Book book = bookFactory.build();
@@ -100,6 +106,7 @@ public class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "test", password = "test")
     public void givenABookAndUser_whenAddingAnInvalidBook_itFails() throws Exception {
         User user = userFactory.build();
         Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(user));
@@ -110,6 +117,7 @@ public class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "test", password = "test")
     public void givenABookAndUser_whenTheUserIsInvalid_itFails() throws Exception {
         Book book = bookFactory.build();
         Mockito.when(userRepository.findById(1L)).thenReturn(Optional.empty());
@@ -120,6 +128,7 @@ public class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "test", password = "test")
     public void givenBookAndUser_whenTheUserHasTheBookAndItsRemoved_thenSucceeds()
         throws Exception {
         User user = userFactory.build();
@@ -133,6 +142,7 @@ public class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "test", password = "test")
     public void givenUser_whenTheUserRemovesABookTheyDoNotHave_thenFails() throws Exception {
         User user = userFactory.build();
         Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(user));

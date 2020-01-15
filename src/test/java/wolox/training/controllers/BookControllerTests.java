@@ -19,6 +19,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import wolox.training.factories.BookFactory;
 import wolox.training.models.Book;
@@ -39,6 +40,7 @@ public class BookControllerTests {
     private BookRepository bookRepository;
 
     @Test
+    @WithMockUser(username = "test", password = "test")
     public void givenBooks_whenListingAllBooks_thenAListOfBooksIsReturned() throws Exception {
         int count = bookFactory.faker().number().numberBetween(3, 5);
         List<Book> books = bookFactory.buildList(count);
@@ -52,6 +54,7 @@ public class BookControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "test", password = "test")
     public void givenAnExistingBook_whenShowingABook_thenReturnsTheBook() throws Exception {
         Book book = bookFactory.build();
         String bookJson = objectMapper.writeValueAsString(book);
@@ -63,6 +66,7 @@ public class BookControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "test", password = "test")
     public void givenAnInvalidBook_whenShowingABook_thenFails() throws Exception {
         Mockito.when(bookRepository.findById(1L)).thenReturn(Optional.empty());
         mvc.perform(get("/api/books/1").contentType(MediaType.APPLICATION_JSON))
@@ -80,6 +84,7 @@ public class BookControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "test", password = "test")
     public void givenInvalidParameters_whenCreatingABook_thenFails() throws Exception {
         String badJson = "";
         mvc.perform(
@@ -88,6 +93,7 @@ public class BookControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "test", password = "test")
     public void givenAnExistingBook_whenUpdatingTheBook_itSuccess() throws Exception {
         Book book = bookFactory.build();
         // Just add different data for parameters
@@ -98,6 +104,7 @@ public class BookControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "test", password = "test")
     public void givenAnInvalidBook_whenUpdatingTheBook_itFailsWithNotFound() throws Exception {
         Mockito.when(bookRepository.findById(0L)).thenReturn(Optional.empty());
         String json = objectMapper.writeValueAsString(bookFactory.build());
@@ -106,6 +113,7 @@ public class BookControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "test", password = "test")
     public void givenInvalidParameters_whenUpdatingTheBook_itFailsWithBadRequest()
         throws Exception {
         Book book = bookFactory.build();
@@ -115,6 +123,7 @@ public class BookControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "test", password = "test")
     public void givenAnExistingBook_whenDestroyingTheBook_thenDeletesTheBook() throws Exception {
         Book book = bookFactory.build();
         Mockito.when(bookRepository.findById(2L)).thenReturn(Optional.of(book));
@@ -124,6 +133,7 @@ public class BookControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "test", password = "test")
     public void givenAnInvalidBook_whenDestroyingTheBook_thenReturnsNotFound() throws Exception {
         Mockito.when(bookRepository.findById(2L)).thenReturn(Optional.empty());
         mvc.perform(delete("/api/books/2").contentType(MediaType.APPLICATION_JSON))
