@@ -17,10 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import wolox.training.dtos.OpenLibraryBook;
 import wolox.training.exceptions.BookMismatchException;
 import wolox.training.exceptions.BookNotFoundException;
 import wolox.training.models.Book;
 import wolox.training.repositories.BookRepository;
+import wolox.training.services.external.OpenLibraryService;
 
 @RestController
 @RequestMapping("/api/books")
@@ -98,5 +100,16 @@ public class BookController {
         }
         bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
         return bookRepository.save(book);
+    }
+
+    @GetMapping("/isbn/{isbn}")
+    @ApiOperation(value = "Finds a book on the open library's listing by ISBN")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "When a book exists"),
+        @ApiResponse(code = 404, message = "When a book could not be found")
+    })
+    public OpenLibraryBook findBookByIsbn(@PathVariable String isbn) throws BookNotFoundException {
+        OpenLibraryService service = new OpenLibraryService();
+        return service.bookInfo(isbn).orElseThrow(BookNotFoundException::new);
     }
 }
