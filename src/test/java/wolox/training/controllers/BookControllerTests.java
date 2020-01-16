@@ -45,8 +45,27 @@ public class BookControllerTests {
         int count = bookFactory.faker().number().numberBetween(3, 5);
         List<Book> books = bookFactory.buildList(count);
         String bookJson = objectMapper.writeValueAsString(books);
-        Mockito.when(bookRepository.findAll()).thenReturn(books);
+        Mockito.when(bookRepository.findByPublisherAndYearAndGenre(null, null, null))
+            .thenReturn(books);
         mvc.perform(get("/api/books").contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", hasSize(count)))
+            .andExpect(content().json(bookJson))
+        ;
+    }
+
+    @Test
+    @WithMockUser(username = "test", password = "test")
+    public void givenBooks_whenListingAllBookBysFilter_thenAListOfBooksIsReturned()
+        throws Exception {
+        int count = bookFactory.faker().number().numberBetween(3, 5);
+        String publisher = bookFactory.faker().book().publisher();
+        List<Book> books = bookFactory.buildList(count);
+        String bookJson = objectMapper.writeValueAsString(books);
+        Mockito.when(bookRepository.findByPublisherAndYearAndGenre(publisher, null, null))
+            .thenReturn(books);
+        mvc.perform(get("/api/books").contentType(MediaType.APPLICATION_JSON)
+            .queryParam("publisher", publisher))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(count)))
             .andExpect(content().json(bookJson))

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import wolox.training.dtos.BookFilters;
 import wolox.training.dtos.OpenLibraryBook;
 import wolox.training.exceptions.BookMismatchException;
 import wolox.training.exceptions.BookNotFoundException;
@@ -49,8 +50,11 @@ public class BookController {
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "When thee application lists all available books.")
     })
-    public Iterable<Book> findAll() {
-        return bookRepository.findAll();
+    public Iterable<Book> findAll(BookFilters filters) {
+        return bookRepository
+            .findByPublisherAndYearAndGenre(
+                filters.getPublisher(), filters.getYear(), filters.getGenre()
+            );
     }
 
     @GetMapping("/{id}")
