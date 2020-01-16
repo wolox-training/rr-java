@@ -46,4 +46,20 @@ public class BookRepositoryTests {
             book.getPublisher(), book.getYear(), book.getGenre().get())
         ).hasAtLeastOneElementOfType(Book.class);
     }
+
+    @Test
+    public void whenOnlyFindingBySomeCriteria_thenReturnsTheBook() {
+        Book book = bookFactory.build();
+        bookRepository.save(book);
+
+        assertThat(bookRepository.findByPublisherAndYearAndGenre(
+            book.getPublisher(), null, null)
+        ).hasAtLeastOneElementOfType(Book.class);
+        assertThat(bookRepository.findByPublisherAndYearAndGenre(
+            null, book.getYear(), null)
+        ).hasAtLeastOneElementOfType(Book.class);
+        assertThat(bookRepository.findByPublisherAndYearAndGenre(
+            null, null, book.getGenre().get())
+        ).hasAtLeastOneElementOfType(Book.class);
+    }
 }

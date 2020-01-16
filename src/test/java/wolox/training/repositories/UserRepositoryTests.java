@@ -55,4 +55,34 @@ class UserRepositoryTests {
             .hasAtLeastOneElementOfType(User.class)
         ;
     }
+
+    @Test
+    public void whenFindingAnUserBySomeConditions_thenReturnsTheUser() {
+        User user = userFactory.build();
+        user.setName("Pedro");
+        userRepository.save(user);
+
+        String partOfName = "PE";
+        LocalDate startDate = user.getBirthdate().minusDays(1);
+        LocalDate endDate = user.getBirthdate().plusDays(1);
+
+        assertThat(
+            userRepository
+                .findByBirthdateBetweenAndNameIgnoreCaseContaining(null, null, partOfName)
+        )
+            .hasAtLeastOneElementOfType(User.class)
+        ;
+        assertThat(
+            userRepository
+                .findByBirthdateBetweenAndNameIgnoreCaseContaining(startDate, endDate, null)
+        )
+            .hasAtLeastOneElementOfType(User.class)
+        ;
+        assertThat(
+            userRepository
+                .findByBirthdateBetweenAndNameIgnoreCaseContaining(startDate, null, partOfName)
+        )
+            .hasAtLeastOneElementOfType(User.class)
+        ;
+    }
 }
