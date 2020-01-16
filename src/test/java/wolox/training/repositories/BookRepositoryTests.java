@@ -36,4 +36,14 @@ public class BookRepositoryTests {
 
         assertThat(bookRepository.findByAuthor(book.getAuthor())).isEmpty();
     }
+
+    @Test
+    public void whenFindingABookBySpecificCriteria_thenReturnsTheBook() {
+        Book book = bookFactory.build();
+        bookRepository.save(book);
+
+        assertThat(bookRepository.findByPublisherAndYearAndGenre(
+            book.getPublisher(), book.getYear(), book.getGenre().get())
+        ).hasAtLeastOneElementOfType(Book.class);
+    }
 }
