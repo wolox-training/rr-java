@@ -44,7 +44,7 @@ dependencies {
     testCompile group: 'org.springframework.security', name: 'spring-security-test', version: '4.0.0.RELEASE'
 
     implementation 'junit:junit:4.12'
-    compile 'com.mashape.unirest:unirest-java:2.2.0'
+    compile group: 'com.konghq', name: 'unirest-java', version: '2.2.00'
 }
 
 test {
