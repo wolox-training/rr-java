@@ -2,6 +2,7 @@ package wolox.training.repositories;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -35,5 +36,23 @@ class UserRepositoryTests {
 
         assertThat(userRepository.findByUsername(user.getUsername()))
             .isEmpty();
+    }
+
+    @Test
+    public void whenFindingAnUserByConditions_thenReturnsTheUser() {
+        User user = userFactory.build();
+        user.setName("Pedro");
+        userRepository.save(user);
+
+        String partOfName = "PE";
+        LocalDate startDate = user.getBirthdate().minusDays(1);
+        LocalDate endDate = user.getBirthdate().plusDays(1);
+
+        assertThat(
+            userRepository
+                .findByBirthdateBetweenAndNameIgnoreCaseContaining(startDate, endDate, partOfName)
+        )
+            .hasAtLeastOneElementOfType(User.class)
+        ;
     }
 }
