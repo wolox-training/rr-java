@@ -43,4 +43,6 @@ public class ProfileControllerTests {
             .andExpect(content().json(json))
         ;
     }
+
+    ˇ
 }
